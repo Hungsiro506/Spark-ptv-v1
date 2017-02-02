@@ -37,12 +37,27 @@ object StringConverter{
       return new DateTime(date)
     }
   }
+  /** :: DeveloperAPI ::
+    * Convert String to JodaDate format
+    *@param s Input string
+    *@return String : joda.time.DateTime in String format
+    *
+    *         FAIL UNIT TEST !!!!
+    *
+    *         */
+  def toJodaDateString(s:String): Any = try{
+    val formater = DateTimeFormat forPattern Constants.DATETIME_FORMAT
+    Some(formater parseDateTime s).map(_.toString()).getOrElse(Constants.BEGINING)
+  }
+  catch{ case e:IllegalArgumentException => Constants.DATETIME_FORMAT}
+
+
 
   /** :: DeveloperAPI ::
     * Convert String to Sql Date
     * java sql date time has three main types of datetime
     *@param s Input string
-    *@return java.sql.Date datetime instance.
+    *@return java.sql.Date instance.
     */
   @DeveloperApi
   def stringToSqlDate(s: String) :java.sql.Date ={
@@ -60,7 +75,7 @@ object StringConverter{
     * Convert String to Sql TimeStamp
     * java sql date time has three main types of datetime
     *@param s Input string
-    *@return java.sql.TimeStamp datetime instance.
+    *@return java.sql.TimeStamp  instance.
     */
   @DeveloperApi
   def stringToSqlTimeStamp(s: String) :Timestamp={
@@ -81,9 +96,10 @@ object StringConverter{
 
   /** :: DeveloperAPI ::
     * Convert String to Int (deal with exception or unparsedable case)
-    * java sql date time has three main types of datetime
+    *
     *@param s Input string
-    *@return java.sql.Date datetime instance.
+    *@param valueReturnedWhenNone returned Value in case None.
+    *@return Int
     */
   @DeveloperApi
   def safetyParseStringToInt(s:String,valueReturnedWhenNone:Int):Int ={
@@ -92,12 +108,12 @@ object StringConverter{
       case None => valueReturnedWhenNone
     }
   }
-  def toJodaDate2(s:String) = try{
-    val formater = DateTimeFormat forPattern Constants.DATETIME_FORMAT
-    Some(formater parseDateTime s).map(_.toString()).getOrElse(Constants.BEGINING)
-  }
-  catch{ case e:IllegalArgumentException => Constants.DATETIME_FORMAT}
 
+  /** :: DeveloperAPI ::
+    * Get hash code of a String
+    *@param s Input string
+    *@return Int
+    */
   def getHashCode(s:String) :String ={
     try{
       var md5 = MessageDigest.getInstance("MD5")
@@ -111,6 +127,7 @@ object StringConverter{
       return stringBuffer.toString()
     }
   }
+
   def jsonStringToMap(jsonString :String): Map[String,Any] = {
 
     implicit val formats = DefaultFormats
@@ -123,7 +140,9 @@ object testStringConverter{
   def main(args: Array[String]): Unit = {
     val s = StringConverter.getHashCode("Vu Duy Hung")
     println(s)
-    val t = StringConverter.stringToSqlTimeStamp("2017-01-05T23:00:00+07:00")
-    println(t)
+    val timeStamp = StringConverter.stringToSqlTimeStamp("2017-01-05T23:00:00+07:00")
+    println(timeStamp)
+    val  jodaDate = StringConverter.toJodaDateString("2017-01-05T23:00:00+07:00")
+    println(jodaDate)
   }
 }
