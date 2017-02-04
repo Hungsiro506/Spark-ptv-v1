@@ -7,14 +7,14 @@ class MapConverter {
 
 }
 object MapConverter{
-  def getValueByKeyFromMap(s :String,map: Map[String,Any]): Option[Any] ={
+  def getValueByKeyFromMap(s :String,map: scala.collection.Map[String,Any]): Option[Any] ={
     try{
       Some(map(s))
     }catch{
       case e:NoSuchElementException => None
     }
   }
-  def safetyGetValueByKey(s:String,map: Map[String,Any])={
+  def safetyGetValueByKey(s:String,map: scala.collection.Map[String,Any])={
     getValueByKeyFromMap(s,map) match{
       case Some(n) => n.toString
       case None    => null
